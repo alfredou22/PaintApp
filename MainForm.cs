@@ -18,20 +18,45 @@ namespace PaintApp
 
         public MainForm()
         {
-            this.Text = "Mini Paint";
+            this.Text = "Mini Paint by Alfredou22";
             this.DoubleBuffered = true;
             this.WindowState = FormWindowState.Maximized;
 
-            cbFiguras = new ComboBox { Location = new Point(10, 10), Width = 150 };
+            // Personalización del fondo y bordes del formulario
+            this.BackColor = Color.WhiteSmoke; // Cambia el color de fondo
+            this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bordes fijos
+            this.MaximizeBox = true; // Deshabilita maximizar
+
+            // Personalización del ComboBox
+            cbFiguras = new ComboBox
+            {
+                Location = new Point(10, 10),
+                Width = 150,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                BackColor = Color.LightYellow,
+                ForeColor = Color.DarkSlateGray
+            };
             cbFiguras.Items.AddRange(new string[] { "Selección", "Rectángulo", "Línea", "Círculo", "Triángulo" });
             cbFiguras.SelectedIndex = 0;
             this.Controls.Add(cbFiguras);
 
-            lblCoords = new Label { Location = new Point(200, 10), Width = 150 };
+            // Personalización del Label de coordenadas
+            lblCoords = new Label
+            {
+                Location = new Point(200, 10),
+                Width = 200,
+                Font = new Font("Consolas", 10, FontStyle.Italic),
+                ForeColor = Color.DarkBlue,
+                BackColor = Color.Transparent
+            };
             this.Controls.Add(lblCoords);
 
+            // Personalización del menú contextual
             menuContextual = new ContextMenuStrip();
             var eliminar = new ToolStripMenuItem("Eliminar");
+            eliminar.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            eliminar.ForeColor = Color.Red;
             eliminar.Click += (s, e) => { figuras.RemoveAll(f => f.Seleccionada); Invalidate(); };
             menuContextual.Items.Add(eliminar);
 
