@@ -25,7 +25,7 @@ namespace PaintApp
             // Personalización del fondo y bordes del formulario
             this.BackColor = Color.WhiteSmoke; // Cambia el color de fondo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bordes fijos
-            this.MaximizeBox = true; // Deshabilita maximizar
+            this.MaximizeBox = true; // Deshabilita o no maximizar
 
             // Personalización del ComboBox
             cbFiguras = new ComboBox
