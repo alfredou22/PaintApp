@@ -13,8 +13,16 @@ namespace PaintApp
         private List<Figura> figuras = new List<Figura>();
         private Figura figuraActual;
         private Estado estadoActual = Estado.Ninguno;
+        private Color colorSeleccionado = Color.Black;
+        private Panel panelColores;
 
         enum Estado { Ninguno, Dibujando, Seleccionando }
+
+        private readonly Color[] colores = new Color[]
+        {
+            Color.Black, Color.Gray, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Teal, Color.Blue, Color.Purple,
+            Color.DarkGray, Color.Brown, Color.Pink, Color.Gold, Color.Khaki, Color.Lime, Color.LightGreen, Color.SkyBlue, Color.Plum
+        };
 
         public MainForm()
         {
@@ -34,10 +42,10 @@ namespace PaintApp
                 Width = 150,
                 DropDownStyle = ComboBoxStyle.DropDownList,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                BackColor = Color.LightYellow,
+                BackColor = Color.LightSteelBlue,
                 ForeColor = Color.DarkSlateGray
             };
-            cbFiguras.Items.AddRange(new string[] { "Selección", "Rectángulo", "Línea", "Círculo", "Triángulo" });
+            cbFiguras.Items.AddRange(new string[] { "Selección", "Rectángulo", "Círculo", "Triángulo", "Línea" });
             cbFiguras.SelectedIndex = 0;
             this.Controls.Add(cbFiguras);
 
@@ -56,9 +64,23 @@ namespace PaintApp
             menuContextual = new ContextMenuStrip();
             var eliminar = new ToolStripMenuItem("Eliminar");
             eliminar.Font = new Font("Segoe UI", 9, FontStyle.Bold);
-            eliminar.ForeColor = Color.Red;
+            eliminar.ForeColor = Color.DarkRed; //NO FUNCIONA
             eliminar.Click += (s, e) => { figuras.RemoveAll(f => f.Seleccionada); Invalidate(); };
             menuContextual.Items.Add(eliminar);
+
+            //Panel de colores
+            panelColores = new Panel
+            {
+                Width = 320,
+                Height = 70,
+                Top = 10,
+                Left = this.ClientSize.Width - 340,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                BackColor = Color.Transparent
+            };
+            this.Controls.Add(panelColores);
+            panelColores.Paint += PanelColores_Paint;
+            panelColores.MouseClick += PanelColores_MouseClick;
 
             this.MouseDown += MainForm_MouseDown;
             this.MouseMove += MainForm_MouseMove;
@@ -71,13 +93,14 @@ namespace PaintApp
             Figura f = tipo switch
             {
                 "Rectángulo" => new Rectangulo(),
-                "Línea"       => new Linea(),
-                "Círculo"     => new Circulo(),
-                "Triángulo"    => new Triangulo(),
-                _             => new Rectangulo(),
+                "Triángulo"  => new Triangulo(),
+                "Círculo"    => new Circulo(),
+                "Línea"      => new Linea(),
+                _            => new Rectangulo(),
             };
-            f.PuntoInicial = p;
-            f.PuntoFinal = p;
+            f.PuntoInicial = p; // Punto inicial es el punto donde se hace clic
+            f.PuntoFinal = p; // Punto final inicial es el mismo punto  
+            f.Color = colorSeleccionado; // Asignar el color seleccionado
             return f;
         }
 
@@ -170,6 +193,41 @@ namespace PaintApp
             foreach (var figura in figuras)
                 figura.Dibujar(e.Graphics);
             figuraActual?.Dibujar(e.Graphics);
+        }
+
+        private void PanelColores_Paint(object sender, PaintEventArgs e)
+        {
+            int size = 24, margin = 8, cols = 9;
+            for (int i = 0; i < colores.Length; i++)
+            {
+                int row = i / cols, col = i % cols;
+                var rect = new Rectangle(col * (size + margin) + 8, row * (size + margin) + 8, size, size);
+                using (var brush = new SolidBrush(colores[i]))
+                    e.Graphics.FillEllipse(brush, rect);
+                if (colores[i] == colorSeleccionado)
+                    e.Graphics.DrawEllipse(new Pen(Color.Black, 3), rect);
+                else
+                    e.Graphics.DrawEllipse(Pens.DarkGray, rect);
+            }
+            // Texto
+            var sf = new StringFormat { Alignment = StringAlignment.Center };
+            e.Graphics.DrawString("Colors", this.Font, Brushes.Gray, panelColores.Width / 2, 2 * (size + margin) + 30, sf);
+        }
+
+        private void PanelColores_MouseClick(object sender, MouseEventArgs e)
+        {
+            int size = 24, margin = 8, cols = 9;
+            for (int i = 0; i < colores.Length; i++)
+            {
+                int row = i / cols, col = i % cols;
+                var rect = new Rectangle(col * (size + margin) + 8, row * (size + margin) + 8, size, size);
+                if (rect.Contains(e.Location))
+                {
+                    colorSeleccionado = colores[i];
+                    panelColores.Invalidate();
+                    break;
+                }
+            }
         }
     }
 }

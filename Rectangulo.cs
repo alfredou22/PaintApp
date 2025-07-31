@@ -13,7 +13,7 @@ namespace PaintApp
                 Math.Abs(PuntoFinal.X - PuntoInicial.X),
                 Math.Abs(PuntoFinal.Y - PuntoInicial.Y));
 
-            using (var pen = new Pen(Seleccionada ? Color.Red : Color.Black, 2))
+            using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawRectangle(pen, rect);
         }
 

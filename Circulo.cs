@@ -16,7 +16,7 @@ namespace PaintApp
                 radio * 2,
                 radio * 2);
 
-            using (var pen = new Pen(Seleccionada ? Color.Red : Color.Black, 2))
+            using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawEllipse(pen, rect);
         }
 

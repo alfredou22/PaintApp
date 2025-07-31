@@ -7,7 +7,7 @@ namespace PaintApp
     {
         public override void Dibujar(Graphics g)
         {
-            using (var pen = new Pen(Seleccionada ? Color.Red : Color.Black, 2))
+            using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawLine(pen, PuntoInicial, PuntoFinal);
         }
 

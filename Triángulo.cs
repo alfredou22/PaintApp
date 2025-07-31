@@ -14,7 +14,7 @@ namespace PaintApp
 
             Point[] puntos = { p1, p2, p3 };
 
-            using (var pen = new Pen(Seleccionada ? Color.Red : Color.Black, 2))
+            using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawPolygon(pen, puntos);
         }
 
