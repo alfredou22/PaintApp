@@ -13,6 +13,13 @@ namespace PaintApp
                 Math.Abs(PuntoFinal.X - PuntoInicial.X),
                 Math.Abs(PuntoFinal.Y - PuntoInicial.Y));
 
+            if (Rellenar)
+            {
+                using (var brush = new SolidBrush(this.Color))
+                    g.FillRectangle(brush, rect);
+
+            }
+
             using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawRectangle(pen, rect);
         }

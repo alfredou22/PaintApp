@@ -33,7 +33,7 @@ namespace PaintApp
             // Personalización del fondo y bordes del formulario
             this.BackColor = Color.WhiteSmoke; // Cambia el color de fondo
             this.FormBorderStyle = FormBorderStyle.FixedSingle; // Bordes fijos
-            this.MaximizeBox = true; // Deshabilita o no maximizar
+            this.MaximizeBox = false; // Deshabilita o no maximizar
 
             // Personalización del ComboBox
             cbFiguras = new ComboBox
@@ -128,6 +128,16 @@ namespace PaintApp
                         // Crear menú contextual dinámico
                         var menu = new ContextMenuStrip();
                         var detallesItem = new ToolStripMenuItem(detalles) { Enabled = false };
+                        //opción para rellenar la figura
+                        var fillItem = new ToolStripMenuItem(figura.Rellenar ? "Quitar relleno" : "Rellenar con color"); //para alternar el relleno (opcional)
+                        fillItem.Click += (s, args) =>
+                        {
+                            figura.Rellenar = !figura.Rellenar;
+                            if (figura.Rellenar)
+                                figura.Color = colorSeleccionado;
+                            Invalidate();
+                        };
+
                         var eliminarItem = new ToolStripMenuItem("Eliminar");
                         eliminarItem.Click += (s, args) =>
                         {
@@ -136,6 +146,7 @@ namespace PaintApp
                         };
                         menu.Items.Add(detallesItem);
                         menu.Items.Add(new ToolStripSeparator());
+                        menu.Items.Add(fillItem);
                         menu.Items.Add(eliminarItem);
 
                         // Mostrar menú contextual

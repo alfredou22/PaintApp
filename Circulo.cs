@@ -16,6 +16,12 @@ namespace PaintApp
                 radio * 2,
                 radio * 2);
 
+            if (Rellenar)
+            {
+                using (var brush = new SolidBrush(this.Color))
+                    g.FillEllipse(brush, rect);
+            }
+
             using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawEllipse(pen, rect);
         }

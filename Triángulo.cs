@@ -14,6 +14,12 @@ namespace PaintApp
 
             Point[] puntos = { p1, p2, p3 };
 
+            if (Rellenar)
+            {
+                using (var brush = new SolidBrush(this.Color))
+                    g.FillPolygon(brush, puntos);
+            }
+
             using (var pen = new Pen(Seleccionada ? Color.Red : this.Color, 2))
                 g.DrawPolygon(pen, puntos);
         }
